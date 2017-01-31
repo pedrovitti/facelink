@@ -1,6 +1,2 @@
-require "facelink/version"
-require "facelink/report"
-
-module Facelink
-  # Your code goes here...
-end
+require_relative 'facelink/report.rb'
+require_relative 'facelink/config.rb'

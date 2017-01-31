@@ -1,0 +1,28 @@
+#!/usr/bin/env ruby
+
+require 'commander/import'
+require 'facelink'
+
+program :name, 'Facelink'
+program :version, '0.1.0'
+program :description, 'Collect users interaction with a Facebook page.'
+
+command :generate do |c|
+  c.syntax = 'facelink generate <filename>'
+  c.description = 'Generate the report'
+  c.action do |args, _|
+    fail 'You have to specify the filename' unless args.first
+    Facelink::Config.configure_facebook_client
+    Facelink::Report.new(filename: args.first).generate
+  end
+end
+
+command :configure do |c|
+  c.syntax = 'facelink configure'
+  c.description = 'Generate the facelink config file'
+  c.action do |_, _|
+    access_token = ask('Access token: ')
+    Facelink::Config.create_config_file(access_token)
+    puts 'Config file generated at ~/.facelink-config.yml'
+  end
+end

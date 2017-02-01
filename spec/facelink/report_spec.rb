@@ -8,6 +8,7 @@ describe Facelink::Report do
     before do
       facebook_data = JSON.load(File.read(File.join("spec", "fixtures", "stagelink.json")))
       allow_any_instance_of(Koala::Facebook::API).to receive(:get_connections).and_return(facebook_data)
+      allow_any_instance_of(Koala::Facebook::API::GraphCollection).to receive(:next_page).and_return(nil)
     end
 
     subject { report.generate_csv }

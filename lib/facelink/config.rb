@@ -6,7 +6,7 @@ module Facelink
   module Config
 
     CONFIG_PATH = '~/.facelink-config.yml'
-    API_VERSION = "2.8"
+    API_VERSION = "v2.8"
 
     module_function
 

@@ -1,0 +1,71 @@
+{
+  "data": [
+    {
+      "id": "628684973875832",
+      "name": "Molly Sunshine",
+      "type": "LIKE"
+    },
+    {
+      "id": "505092606293763",
+      "name": "Nancy Noack",
+      "type": "LIKE"
+    },
+    {
+      "id": "677596062341656",
+      "name": "Jacqueline Stübig",
+      "type": "LIKE"
+    },
+    {
+      "id": "656835411031064",
+      "name": "Anna Richter",
+      "type": "LIKE"
+    },
+    {
+      "id": "1656928077865086",
+      "name": "Julia Czas",
+      "type": "LIKE"
+    },
+    {
+      "id": "286472728399133",
+      "name": "Emmy Lochi",
+      "type": "LIKE"
+    },
+    {
+      "id": "763738223714953",
+      "name": "Kira Hermes",
+      "type": "LIKE"
+    },
+    {
+      "id": "1394363727528244",
+      "name": "Jessy Moses",
+      "type": "LOVE"
+    },
+    {
+      "id": "724003760979034",
+      "name": "Sven Leichsenring",
+      "type": "LIKE"
+    },
+    {
+      "id": "231197550304894",
+      "name": "VideoDays",
+      "type": "LIKE"
+    },
+    {
+      "id": "10203227068990080",
+      "name": "Alisha Rogée",
+      "type": "LIKE"
+    },
+    {
+      "id": "155208441488510",
+      "name": "Alisha Lara Osswald",
+      "type": "LIKE"
+    }
+  ],
+  "paging": {
+    "cursors": {
+      "before": "TVRBd01EQXlNRE13TURVeE5UTXhPakUwT0RVM09UQTFNRFU2TWpVME1EazJNVFl4TXc9PQZDZD",
+      "after": "TVRBd01EQTVPVGd3TmpVMk5UTXlPakUwT0RVM09Ea3pPVEE2TWpVME1EazJNVFl4TXc9PQZDZD"
+    },
+    "previous": "https://graph.facebook.com/v2.8/305736219467790_1350374218337313/reactions?access_token=EAACEdEose0cBAJ4vM21z1lcSBbWfuc4vTbO4dNTqlUTHIxe5xdvGpZA4agQJIOEHlUTX0gmbxVkHse53LCIcpSAYZATKgX4q23yjXEOSM6Bg4O2CqbgPJ3SJVHZCTFOMVZBWYi1qCvHolfdKKKZBqSUHJF88gmLYjkoOHjjiFVIeownvUhzp9&pretty=0&limit=25&before=TVRBd01EQXlNRE13TURVeE5UTXhPakUwT0RVM09UQTFNRFU2TWpVME1EazJNVFl4TXc9PQZDZD"
+  }
+}

@@ -17,7 +17,7 @@ module Facelink
     end
 
     def reactions(post, page_id)
-      reactions_data = post["reactions"] && post["reactions"]["data"] || []
+      reactions_data = Koala::Facebook::API::GraphCollection.new(post["reactions"], graph) || []
       @reactions = reactions_data.map do |reaction|
         {
           user_id: reaction["id"],
@@ -28,7 +28,26 @@ module Facelink
           interaction_subtype: reaction["type"]
         }
       end
+      reactions_data = reactions_data.next_page
+
+      while reactions_data
+        @reactions += reactions_data.map do |reaction|
+          {
+            user_id: reaction["id"],
+            page_id: page_id,
+            post_id: post["id"],
+            post_type: post["type"],
+            interaction_type: "reaction",
+            interaction_subtype: reaction["type"]
+          }
+        end
+
+        reactions_data = reactions_data.next_page
+      end
+
+      @reactions
     end
+
 
     def comments(post, page_id)
       comments_data = post["comments"] && post["comments"]["data"] || []

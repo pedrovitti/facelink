@@ -11,6 +11,7 @@ describe Facelink::Client do
     before do
       facebook_data = JSON.load(File.read(File.join("spec", "fixtures", "stagelink.json")))
       allow_any_instance_of(Koala::Facebook::API).to receive(:get_connections).and_return(facebook_data)
+      allow_any_instance_of(Koala::Facebook::API::GraphCollection).to receive(:next_page).and_return(nil)
     end
 
     subject { client.interactions_for(page_id, 2) }
@@ -49,21 +50,48 @@ describe Facelink::Client do
 
     subject { client.reactions(reactions_data, page_id) }
 
-    it "returns 25 user reactions" do
-      expect(subject.count).to be 25
+    context "with less or equal 25 reactions (no pagination)" do
+      before { allow_any_instance_of(Koala::Facebook::API::GraphCollection).to receive(:next_page).and_return(nil) }
+
+      it "returns 25 user reactions" do
+        expect(subject.count).to be 25
+      end
+
+      it "returns reaction from specific user" do
+        expected_reaction =
+          { user_id: "208217512958711",
+            page_id: "305736219467790",
+            post_id: "305736219467790_1350374218337313",
+            post_type: "photo",
+            interaction_type: "reaction",
+            interaction_subtype: "LIKE"
+          }
+
+        expect(subject).to include expected_reaction
+      end
     end
 
-    it "returns reaction from specific user" do
-      expected_reaction =
-        { user_id: "208217512958711",
-          page_id: "305736219467790",
-          post_id: "305736219467790_1350374218337313",
-          post_type: "photo",
-          interaction_type: "reaction",
-          interaction_subtype: "LIKE"
-        }
+    context "when more than 25 reactions (with pagination)" do
+      let(:second_page_reactions_data) { JSON.load(File.read(File.join("spec", "fixtures", "stagelink-reactions-page2.json"))) }
 
-      expect(subject).to include expected_reaction
+      before do
+        allow_any_instance_of(Koala::Facebook::API::GraphCollection).to receive(:next_page).and_return(second_page_reactions_data["data"])
+        allow_any_instance_of(Array).to receive(:next_page).and_return(nil)
+      end
+
+      it "returns a user reaction in the second page" do
+
+        expected_reaction =
+          { user_id: "628684973875832",
+            page_id: "305736219467790",
+            post_id: "305736219467790_1350374218337313",
+            post_type: "photo",
+            interaction_type: "reaction",
+            interaction_subtype: "LIKE"
+          }
+
+          expect(subject).to include expected_reaction
+      end
     end
   end
 

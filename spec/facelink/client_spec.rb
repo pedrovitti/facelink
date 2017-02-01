@@ -2,19 +2,19 @@ require "spec_helper"
 require "json"
 
 describe Facelink::Client do
-  let(:client) { described_class.new }
   let(:page_id) { "305736219467790" }
+  let(:client) { described_class.new(page_id, 2) }
 
   before { Facelink::Config.configure_facebook_client }
 
-  describe "#interactions_for" do
+  describe "#interactions" do
     before do
       facebook_data = JSON.load(File.read(File.join("spec", "fixtures", "stagelink.json")))
       allow_any_instance_of(Koala::Facebook::API).to receive(:get_connections).and_return(facebook_data)
       allow_any_instance_of(Koala::Facebook::API::GraphCollection).to receive(:next_page).and_return(nil)
     end
 
-    subject { client.interactions_for(page_id, 2) }
+    subject { client.interactions }
 
     it "returns both user interactions for a given page" do
       expected_interactions = [
@@ -48,7 +48,7 @@ describe Facelink::Client do
   describe "#reactions" do
     let(:reactions_data) { JSON.load(File.read(File.join("spec", "fixtures", "stagelink-reactions.json"))) }
 
-    subject { client.reactions(reactions_data, page_id) }
+    subject { client.reactions(reactions_data) }
 
     context "with less or equal 25 reactions (no pagination)" do
       before { allow_any_instance_of(Koala::Facebook::API::GraphCollection).to receive(:next_page).and_return(nil) }
@@ -98,7 +98,7 @@ describe Facelink::Client do
   describe "#comments" do
     let(:comments_data) { JSON.load(File.read(File.join("spec", "fixtures", "stagelink-comments.json"))) }
 
-    subject { client.comments(comments_data, page_id) }
+    subject { client.comments(comments_data) }
 
     it "returns 3 user comments" do
       expect(subject.count).to be 3

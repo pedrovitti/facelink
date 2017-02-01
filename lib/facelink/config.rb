@@ -15,7 +15,7 @@ module Facelink
     end
 
     def configure_facebook_client
-      Koala.config.api_version = config["facebook"]["api_version"]
+      Koala.config.api_version = config["facebook"]["api_version"] || API_VERSION
     end
 
     def create_config_file(access_token, api_version = API_VERSION)

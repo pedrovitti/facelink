@@ -12,8 +12,12 @@ command :generate do |c|
   c.description = 'Generate the report'
   c.action do |args, _|
     fail 'You have to specify the filename' unless args.first
+
     Facelink::Config.configure_facebook_client
-    Facelink::Report.new(filename: args.first).generate
+
+    file = File.open(args.first, 'r')
+    Facelink::Report.new(file).generate_csv
+    puts 'User interaction report generated.'
   end
 end
 

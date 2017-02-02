@@ -12,9 +12,9 @@ module Facelink
     def interactions()
       @interactions = []
       posts = graph.get_connections(page_id, "posts", { limit: limit,
-                                                         fields: ["reactions",
-                                                                  "comments",
-                                                                  "type"]})
+                                                        fields: ["reactions{id, type}",
+                                                                 "comments{id, from}",
+                                                                 "type"]})
 
       posts.each do |post|
         @interactions += reactions(post) + comments(post)

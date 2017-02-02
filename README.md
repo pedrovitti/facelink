@@ -1,28 +1,29 @@
 # Facelink
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/facelink`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+Collect Facebook users interactions with Facebook pages
 
 ## Installation
 
-Add this line to your application's Gemfile:
+    $ gem build facelink.gemspec
+    $ gem install facelink-0.1.0.gem
 
-```ruby
-gem 'facelink'
-```
+## Configuration
 
-And then execute:
+    facelink configure
 
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install facelink
+You will be asked for your Facebook Access Token.
 
 ## Usage
 
-TODO: Write usage instructions here
+    facelink generate <file>
+
+The file should contains a list of IDs of Facebook pages and the number of latest posts to process. An file example would be:
+
+    305736218293232,10
+    123443433440187,10
+    343499393939939,15
+
+After running this command, a new file containing user interactions will be created in the current directory.
 
 ## Development
 
@@ -32,7 +33,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/Pedro Vitti/facelink.
+Bug reports and pull requests are welcome on GitHub at https://github.com/pedrovitti/facelink.
 
 
 ## License

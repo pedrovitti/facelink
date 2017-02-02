@@ -10,50 +10,35 @@ module Facelink
     end
 
     def interactions()
-      @interactions = []
+      interactions = []
       posts = graph.get_connections(page_id, "posts", { limit: limit,
                                                         fields: ["reactions{id, type}",
                                                                  "comments{id, from}",
                                                                  "type"]})
 
       posts.each do |post|
-        @interactions += reactions(post) + comments(post)
+        interactions += interactions_for(post, "reactions") + interactions_for(post, "comments")
       end
 
-      @interactions
+      interactions
     end
 
-    def reactions(post)
-      return [] unless post["reactions"]
+    def interactions_for(post, interaction_type)
+      return [] unless post[interaction_type]
 
-      reactions_data = Koala::Facebook::API::GraphCollection.new(post["reactions"], graph) || []
+      interactions_data = Koala::Facebook::API::GraphCollection.new(post[interaction_type], graph)
 
-      @reactions = transform_data(reactions_data, post, "reaction")
-      reactions_data = reactions_data.next_page
+      interactions = transform_data(interactions_data, post, interaction_type)
+      interactions_data = interactions_data.next_page
 
-      while reactions_data
-        @reactions += transform_data(reactions_data, post, "reaction")
-        reactions_data = reactions_data.next_page
+      while interactions_data
+        interactions += transform_data(interactions_data, post, interaction_type)
+        interactions_data = interactions_data.next_page
       end
 
-      @reactions
+      interactions
     end
 
-    def comments(post)
-      return [] unless post["comments"]
-
-      comments_data = Koala::Facebook::API::GraphCollection.new(post["comments"], graph) || []
-
-      @comments = transform_data(comments_data, post, "comment")
-      comments_data = comments_data.next_page
-
-      while comments_data
-        @comments += transform_data(comments_data, post, "comment")
-        comments_data = comments_data.next_page
-      end
-
-      @comments
-    end
 
     def graph
       @graph ||= Koala::Facebook::API.new(Facelink::Config.access_token)
@@ -67,8 +52,7 @@ module Facelink
           user_id: interaction["id"],
           page_id: page_id,
           post_id: post["id"],
-          post_type: post["type"],
-          interaction_type: interaction_type
+          post_type: post["type"]
         }
 
         formatted_data.merge(transform_data_for(interaction_type, interaction))
@@ -77,10 +61,10 @@ module Facelink
 
     def transform_data_for(interaction_type, interaction)
       case interaction_type
-      when "comment"
-        { user_id: interaction["from"]["id"] }
-      when "reaction"
-        { user_id: interaction["id"], interaction_subtype: interaction["type"] }
+      when "comments"
+        { user_id: interaction["from"]["id"], interaction_type: "comment" }
+      when "reactions"
+        { user_id: interaction["id"], interaction_type: "reaction", interaction_subtype: interaction["type"] }
       else
         {}
       end

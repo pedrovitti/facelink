@@ -24,6 +24,8 @@ module Facelink
     end
 
     def reactions(post)
+      return [] unless post["reactions"]
+
       reactions_data = Koala::Facebook::API::GraphCollection.new(post["reactions"], graph) || []
 
       @reactions = transform_data(reactions_data, post, "reaction")
@@ -38,6 +40,8 @@ module Facelink
     end
 
     def comments(post)
+      return [] unless post["comments"]
+
       comments_data = Koala::Facebook::API::GraphCollection.new(post["comments"], graph) || []
 
       @comments = transform_data(comments_data, post, "comment")

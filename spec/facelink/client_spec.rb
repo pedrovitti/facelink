@@ -8,8 +8,9 @@ describe Facelink::Client do
   before { Facelink::Config.configure_facebook_client }
 
   describe "#interactions" do
+    let(:facebook_data) { JSON.load(File.read(File.join("spec", "fixtures", "stagelink.json"))) }
+
     before do
-      facebook_data = JSON.load(File.read(File.join("spec", "fixtures", "stagelink.json")))
       allow_any_instance_of(Koala::Facebook::API).to receive(:get_connections).and_return(facebook_data)
       allow_any_instance_of(Koala::Facebook::API::GraphCollection).to receive(:next_page).and_return(nil)
     end
@@ -43,6 +44,17 @@ describe Facelink::Client do
 
       expect(subject).to include(*expected_interactions)
     end
+
+    context "when no reactions" do
+      before do
+        facebook_data.first.delete("reactions")
+      end
+
+      it "returns all comments" do
+        expect(subject.count).to eq 64
+      end
+    end
+
   end
 
   describe "#reactions" do
@@ -93,6 +105,17 @@ describe Facelink::Client do
           expect(subject).to include expected_reaction
       end
     end
+
+    context "when no reactions" do
+      before do
+        reactions_data.delete("reactions")
+      end
+
+      it "returns no reactions" do
+        expect(subject.count).to eq 0
+      end
+    end
+
   end
 
   describe "#comments" do
@@ -114,6 +137,16 @@ describe Facelink::Client do
         }
 
       expect(subject).to include expected_reaction
+    end
+
+    context "when no comments" do
+      before do
+        comments_data.delete("comments")
+      end
+
+      it "returns no comments" do
+        expect(subject.count).to eq 0
+      end
     end
   end
 end

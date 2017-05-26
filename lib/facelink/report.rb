@@ -15,7 +15,7 @@ module Facelink
         CSV.foreach(file) do |row|
           page_id = row[0]
           limit = row[1]
-          interactions = Facelink::Client.new(page_id, limit).interactions
+          interactions = Facelink::Client.new(page_id, limit, Facelink::FacebookClient.new).interactions
           interactions.each { |interaction| csv << interaction.values }
         end
       end

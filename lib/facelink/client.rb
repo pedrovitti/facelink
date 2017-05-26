@@ -2,19 +2,17 @@ module Facelink
 
   class Client
 
-    attr_accessor :page_id, :limit
+    attr_accessor :page_id, :limit, :facebook_client
 
-    def initialize(page_id, limit = 25)
+    def initialize(page_id, limit = 25, facebook_client)
       @page_id = page_id
       @limit = limit
+      @facebook_client = facebook_client || Facelink::FacebookClient.new
     end
 
     def interactions()
       interactions = []
-      posts = graph.get_connections(page_id, "posts", { limit: limit,
-                                                        fields: ["reactions{id, type}",
-                                                                 "comments{id, from}",
-                                                                 "type"]})
+      posts = facebook_client.posts(page_id, limit)
 
       posts.each do |post|
         interactions += interactions_for(post, "reactions") + interactions_for(post, "comments")
@@ -26,7 +24,7 @@ module Facelink
     def interactions_for(post, interaction_type)
       return [] unless post[interaction_type]
 
-      interactions_data = Koala::Facebook::API::GraphCollection.new(post[interaction_type], graph)
+      interactions_data = facebook_client.interactions_data_for(post[interaction_type])
 
       interactions = transform_data(interactions_data, post, interaction_type)
       interactions_data = interactions_data.next_page
@@ -37,11 +35,6 @@ module Facelink
       end
 
       interactions
-    end
-
-
-    def graph
-      @graph ||= Koala::Facebook::API.new(Facelink::Config.access_token)
     end
 
     private

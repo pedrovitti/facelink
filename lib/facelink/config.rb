@@ -14,7 +14,7 @@ module Facelink
       @config ||= YAML.load_file(File.expand_path(CONFIG_PATH))
     end
 
-    def configure_facebook_client
+    def configure_koala_facebook_client
       Koala.config.api_version = config["facebook"]["api_version"] || API_VERSION
     end
 

@@ -5,7 +5,7 @@ describe Facelink::Client do
   let(:page_id) { "305736219467790" }
   let(:client) { described_class.new(page_id, 2) }
 
-  before { Facelink::Config.configure_facebook_client }
+  before { Facelink::Config.configure_koala_facebook_client }
 
   describe "#interactions" do
     let(:facebook_data) { JSON.load(File.read(File.join("spec", "fixtures", "stagelink.json"))) }

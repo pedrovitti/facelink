@@ -1,9 +1,7 @@
 require 'csv'
 
 module Facelink
-
   class Report
-
     attr_reader :file
 
     def initialize(file)
@@ -22,9 +20,8 @@ module Facelink
     end
 
     def filepath
-      input_file = File.basename(file.path, ".*")
+      input_file = File.basename(file.path, '.*')
       "#{File.dirname(file.path)}/#{input_file}-user-interactions.csv"
     end
   end
-
 end

@@ -1,7 +1,5 @@
 module Facelink
-
   class Client
-
     attr_accessor :page_id, :limit, :facebook_client
 
     def initialize(page_id, limit = 25, facebook_client)
@@ -10,12 +8,12 @@ module Facelink
       @facebook_client = facebook_client || Facelink::FacebookClient.new
     end
 
-    def interactions()
+    def interactions
       interactions = []
       posts = facebook_client.posts(page_id, limit)
 
       posts.each do |post|
-        interactions += interactions_for(post, "reactions") + interactions_for(post, "comments")
+        interactions += interactions_for(post, 'reactions') + interactions_for(post, 'comments')
       end
 
       interactions
@@ -41,11 +39,11 @@ module Facelink
 
     def transform_data(data, post, interaction_type)
       data.map do |interaction|
-        formatted_data  = {
-          user_id: interaction["id"],
+        formatted_data = {
+          user_id: interaction['id'],
           page_id: page_id,
-          post_id: post["id"],
-          post_type: post["type"]
+          post_id: post['id'],
+          post_type: post['type']
         }
 
         formatted_data.merge(transform_data_for(interaction_type, interaction))
@@ -54,15 +52,13 @@ module Facelink
 
     def transform_data_for(interaction_type, interaction)
       case interaction_type
-      when "comments"
-        { user_id: interaction["from"]["id"], interaction_type: "comment" }
-      when "reactions"
-        { user_id: interaction["id"], interaction_type: "reaction", interaction_subtype: interaction["type"] }
+      when 'comments'
+        { user_id: interaction['from']['id'], interaction_type: 'comment' }
+      when 'reactions'
+        { user_id: interaction['id'], interaction_type: 'reaction', interaction_subtype: interaction['type'] }
       else
         {}
       end
     end
-
   end
-
 end

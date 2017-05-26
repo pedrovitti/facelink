@@ -1,9 +1,7 @@
 require 'koala'
 
 module Facelink
-
   class FacebookClient
-
     attr_reader :client
 
     def initialize
@@ -15,11 +13,10 @@ module Facelink
     end
 
     def posts(page_id, limit)
-      client.get_connections(page_id, "posts", { limit: limit,
-                                                 fields: ["reactions{id, type}",
-                                                          "comments{id, from}",
-                                                          "type"]})
+      client.get_connections(page_id, 'posts', limit: limit,
+                                               fields: ['reactions{id, type}',
+                                                        'comments{id, from}',
+                                                        'type'])
     end
-
   end
 end

@@ -3,15 +3,16 @@ require "json"
 
 describe Facelink::Client do
   let(:page_id) { "305736219467790" }
-  let(:client) { described_class.new(page_id, 2) }
+  let(:facebook_client) { Facelink::FacebookClient.new }
+  let(:client) { described_class.new(page_id, 2, facebook_client) }
 
-  before { Facelink::Config.configure_facebook_client }
+  before { Facelink::Config.configure_koala_facebook_client }
 
   describe "#interactions" do
     let(:facebook_data) { JSON.load(File.read(File.join("spec", "fixtures", "stagelink.json"))) }
 
     before do
-      allow_any_instance_of(Koala::Facebook::API).to receive(:get_connections).and_return(facebook_data)
+      allow_any_instance_of(Facelink::FacebookClient).to receive(:posts).and_return(facebook_data)
       allow_any_instance_of(Koala::Facebook::API::GraphCollection).to receive(:next_page).and_return(nil)
     end
 

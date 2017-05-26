@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["pedrovitti@gmail.com"]
 
   spec.summary       = "Collect Facebook users interactions with a given Facebook page."
-  spec.homepage      = "https://github.com/pedrovitti/spregen'"
+  spec.homepage      = "https://github.com/pedrovitti/facelink'"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0").reject do |f|
